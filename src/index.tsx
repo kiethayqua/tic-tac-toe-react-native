@@ -1,22 +1,11 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { AppBootstrap, Text } from '@components';
+import React, { ReactElement } from 'react';
+import { AppBootstrap } from '@components';
+import Navigator from '@configs/navigator';
 
-export default function App() {
+export default function App(): ReactElement {
     return (
         <AppBootstrap>
-            <View style={styles.container}>
-                <Text style={{ fontSize: 25 }} >Hello World! <Text weight="700">Oke</Text></Text>
-            </View>
+            <Navigator />
         </AppBootstrap>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
