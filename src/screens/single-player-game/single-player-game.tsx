@@ -42,16 +42,18 @@ export default function SinglePlayerGame() {
 
     }, [turn, state]);
 
-    const insertCell = (cell: number, symbol: "x" | "o"): void => {
+    const insertCell = (cell: number, symbol: "x" | "o"): boolean => {
         const stateCopy: BoardState = [...state];
-        if (stateCopy[cell] || isTerminal(stateCopy)) return;
+        if (stateCopy[cell] || isTerminal(stateCopy)) return false;
         stateCopy[cell] = symbol;
         setState(stateCopy);
+        return true;
     }
 
     const handleOnCellPressed = (cell: number): void => {
         if (turn !== "HUMAN") return;
-        insertCell(cell, isHumanMaximizing ? "x" : "o");
+        const inserted = insertCell(cell, isHumanMaximizing ? "x" : "o");
+        if (!inserted) return;
         setTurn("BOT");
     }
 
