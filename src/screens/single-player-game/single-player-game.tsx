@@ -1,11 +1,12 @@
 import { Board, GradientBackground } from '@components'
-import { BoardState, getAvailableMoves, getBestMove, isEmpty, isFull, isTerminal, printFormattedBoard } from '@utils';
+import { BoardState, Cell, getBestMove, isEmpty, isTerminal, useSounds } from '@utils';
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native'
 import styles from './single-player-game.styles';
 
-
 export default function SinglePlayerGame() {
+
+    const playSound = useSounds();
 
     const [state, setState] = useState<BoardState>([
         null, null, null,
@@ -24,6 +25,18 @@ export default function SinglePlayerGame() {
     useEffect(() => {
         if (gameResult) {
             // game over => xu li game over
+            const status = getWinner(gameResult.winner);
+            switch (status) {
+                case 'BOT': {
+                    playSound("lose");
+                } break;
+                case 'HUMAN': {
+                    playSound("win");
+                } break;
+                case 'DRAW': {
+                    playSound("draw");
+                } break;
+            }
         } else {
             if (turn === "BOT") {
                 if (isEmpty(state)) {
@@ -42,11 +55,26 @@ export default function SinglePlayerGame() {
 
     }, [turn, state]);
 
+    const getWinner = (symbol: Cell): "HUMAN" | "BOT" | "DRAW" => {
+        if (symbol === 'x') {
+            return isHumanMaximizing ? "HUMAN" : "BOT";
+        }
+        if (symbol === 'o') {
+            return isHumanMaximizing ? "BOT" : "HUMAN";
+        }
+        return "DRAW";
+    }
+
     const insertCell = (cell: number, symbol: "x" | "o"): boolean => {
         const stateCopy: BoardState = [...state];
         if (stateCopy[cell] || isTerminal(stateCopy)) return false;
         stateCopy[cell] = symbol;
         setState(stateCopy);
+        try {
+            symbol === "x" ? playSound("sound1") : playSound("sound2");
+        } catch (err) {
+            console.log(err);
+        }
         return true;
     }
 
