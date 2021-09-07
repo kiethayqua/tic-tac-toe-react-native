@@ -3,6 +3,8 @@ import { BoardState, Cell, getBestMove, isEmpty, isTerminal, useSounds } from '@
 import React, { useState, useEffect } from 'react'
 import { Dimensions, SafeAreaView, View } from 'react-native'
 import styles from './single-player-game.styles';
+import { setting } from '@utils';
+import { observer } from 'mobx-react-lite';
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 
@@ -12,7 +14,17 @@ type countGame = {
     losses: number;
 }
 
-export default function SinglePlayerGame() {
+type levelType = {
+    [key: string]: string;
+}
+
+const mapLevel: levelType = {
+    "2": "NORMAL",
+    "1": "EASY",
+    "3": "HARD",
+}
+
+function SinglePlayerGame() {
 
     const playSound = useSounds();
 
@@ -69,7 +81,7 @@ export default function SinglePlayerGame() {
                     setIsHumanMaximazing(false);
                     setTurn("HUMAN");
                 } else {
-                    const best = getBestMove(state, !isHumanMaximizing, 0, -1);
+                    const best = getBestMove(state, !isHumanMaximizing, 0, setting.difficulty);
                     insertCell(best, isHumanMaximizing ? "o" : "x");
                     setTurn("HUMAN");
                 }
@@ -117,7 +129,7 @@ export default function SinglePlayerGame() {
         <GradientBackground>
             <SafeAreaView style={styles.container}>
                 <View style={styles.head}>
-                    <Text style={styles.settingText} weight="700">{`DIFFICULTY: HARD`}</Text>
+                    <Text style={styles.settingText} weight="700">{`DIFFICULTY: ${mapLevel[setting.difficulty.toString()]}`}</Text>
                     <View style={styles.wrapResults}>
                         <View style={styles.resultBox}>
                             <Text style={styles.normalText} weight="700">WINS</Text>
@@ -147,3 +159,5 @@ export default function SinglePlayerGame() {
         </GradientBackground>
     )
 }
+
+export default observer(SinglePlayerGame);

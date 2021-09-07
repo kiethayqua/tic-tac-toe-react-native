@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Audio } from 'expo-av';
+import { setting } from '@utils';
 
 type soundTypes = "sound1" | "sound2" | "win" | "lose" | "draw";
 
@@ -43,35 +44,35 @@ export default function useSounds(): (sound: soundTypes) => void {
         switch (sound) {
             case 'sound1': {
                 try {
-                    soundOneRef.current?.replayAsync();
+                    setting.sound && soundOneRef.current?.replayAsync();
                 } catch (err) {
                     console.log(err);
                 }
             } break;
             case 'sound2': {
                 try {
-                    soundTwoRef.current?.replayAsync();
+                    setting.sound && soundTwoRef.current?.replayAsync();
                 } catch (err) {
                     console.log(err);
                 }
             } break;
             case 'win': {
                 try {
-                    winSoundRef.current?.replayAsync();
+                    setting.sound && winSoundRef.current?.replayAsync();
                 } catch (err) {
                     console.log(err);
                 }
             } break;
             case 'lose': {
                 try {
-                    loseSoundRef.current?.replayAsync();
+                    setting.sound && loseSoundRef.current?.replayAsync();
                 } catch (err) {
                     console.log(err);
                 }
             } break;
             case 'draw': {
                 try {
-                    drawSoundRef.current?.replayAsync();
+                    setting.sound && drawSoundRef.current?.replayAsync();
                 } catch (err) {
                     console.log(err);
                 }
